@@ -13,12 +13,12 @@
  * ./main
  */
 
-#include <string>
 #include <iostream>
 #include <optional>
+#include <string>
 
 /**
- * The method receive order array of integers and found the moda.
+ * The method receive an ordered array of integers and found the moda.
  * @param int
  * @param int
  * @return int
@@ -34,7 +34,7 @@ std::optional<int *> calculateTheModa(int numbers[], const int &arrSize) {
   int lastIndex{arrSize / 2};
 
   while (beginIndex != lastIndex) {
-    int counter{};
+    int counter{0};
     for (beginIndex; beginIndex != lastIndex; beginIndex++) {
       if (numbers[beginIndex] == numbers[beginIndex + 1]) {
         if (counter == 0) {
@@ -46,8 +46,10 @@ std::optional<int *> calculateTheModa(int numbers[], const int &arrSize) {
         counter = 0;
       }
 
-      if ((counter > 0 && currentModaSize == 0) ||
-          (counter > currentModaSize) || modaValue < numbers[beginIndex]) {
+      if (((counter > 0) && (currentModaSize == 0)) ||
+          (counter > currentModaSize) ||
+          ((modaValue < numbers[beginIndex + 1]) && (currentModaSize != 0) &&
+           (counter == 1))) {
 
         currentModaSize = counter;
         modaIndex = currModaIndex;
@@ -68,8 +70,9 @@ int main(int argc, char **argv) {
   /**
    * To testing the solution we use these arays listed below.
    * Where each array values was used for testing different scenaios, such as:
-   * 1- Minimize the Big On notation, if possible, just use O(n/2) or the half
-   * size of the array, when the Moda is found in the first sub-array.
+   *
+   * 1- Minimize the Big On Notation. It happen when we can found the moda in
+   * the middle of array. In this case the O(n/2) or the half size of array.
    *
    * 2 - In case of a couples of number has the same MODA or repetitions, we
    * return the MODA with max value.
@@ -80,12 +83,14 @@ int main(int argc, char **argv) {
   int moda[21] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 4,
                   4, 4, 5, 5, 5, 5, 5, 5, 5, 5};
   int modaB[12] = {1, 2, 2, 2, 3, 4, 5, 6, 6, 7, 7, 7};
-  int modaC[12] = {1, 12, 32, 72, 38, 94, 105, 206, 360, 917, 1017, 17091};
+  int modaC[15] = {1,  12,  12,  12,  32,  32,   38,   72,
+                   94, 105, 206, 360, 917, 1017, 17091};
+  int modaD[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-  auto getModa = calculateTheModa(modaC, 12);
+  auto getModa = calculateTheModa(modaD, 10);
   getModa != nullptr
       ? std::cout << "THE MODA IS " << *getModa.value() << std::endl
-      : std::cout << "THE MODA IS THE SAME FOR ALL ELEMENTS";
+      : std::cout << "THE MODA IS THE SAME FOR ALL ELEMENTS" << std::endl;
 
   return 0;
 }
